@@ -1,0 +1,36 @@
+.formLogin{
+    display: flex;
+    flex-wrap: wrap;
+    /*flex-direction: column;*/
+    gap: 15px;
+}
+.container{
+    
+    max-height: 100%;
+    background-color: #c8c8b4;
+    height: 900px;
+    border-radius: 10%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Dutch801 Rm BT';
+    color: #000;
+}
+.container a{
+    color: #000;
+}
+input {
+    background-color: white;
+    border-radius: 5px;
+    color: #000; 
+    border: 2px;
+}
+
+.button{
+    color: #000; 
+    background-color: #D7AB1E;
+    font-weight: bold;
+}
+.container a:hover{
+    color: #D7AB1E;
+}

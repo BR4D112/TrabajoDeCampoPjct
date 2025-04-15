@@ -1,4 +1,4 @@
-import styles from './LoginLeftPanel.module.css'
+import styles from '../../assets/LoginStyles/LoginLeftPanel.module.css'
 import uptcMainLogo from '../../assets/uptc-banner-logo.png'
 import ingsistemas from '../../assets/ing-sistemas-logo.png'
 import logoArq from '../../assets/logo_arq.png'
