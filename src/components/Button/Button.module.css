@@ -1,0 +1,14 @@
+.button{
+    color: #000; 
+    background-color: #D7AB1E;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    height: 40px;
+    width: 250px;
+    align-self: center;
+    font-family: 'Dutch801 Rm BT';
+    font-size: 20px;
+}

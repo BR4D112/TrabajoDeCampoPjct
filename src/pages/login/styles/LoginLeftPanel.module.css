@@ -1,0 +1,54 @@
+
+.containerBigLogos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto; /* Cambiar de 100vh a auto para evitar restricciones de altura */
+    min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la ventana */
+    margin: 0;
+    padding: 20px;
+}
+
+
+.containerLogos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; 
+    flex-wrap: wrap; 
+    width: 100%; 
+    max-width: 600px;
+}
+
+.uptcMainLogo {
+    height: 176px;
+}
+
+.icono {
+    height: 150px;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    border-radius: 50%;
+    background-color: white;
+
+}
+.icono img {
+    width: 100%; 
+    height: 100%;
+    object-fit: contain;
+}
+.icono+.icono {
+    margin-left: 15%;
+}
+
+.icono img {
+    width: 90%;
+    height: 90%;
+    display: flex;
+    object-fit: contain;
+    /* Ajusta dentro del círculo sin recortarla */
+    justify-content: center;
+}

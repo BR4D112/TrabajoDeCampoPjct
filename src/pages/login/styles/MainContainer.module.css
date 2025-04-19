@@ -1,0 +1,8 @@
+.container{
+    display: flex;
+    gap: 20vh;
+    align-items: center;
+}
+div + div {
+    justify-content: space-between;
+}

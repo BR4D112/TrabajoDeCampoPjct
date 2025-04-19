@@ -1,0 +1,59 @@
+.formLogin{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 15px;
+}
+.container{    
+    background-color: #c8c8b4;
+    height: 85vh; 
+    width: 30%; 
+    border-radius: 2rem; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Dutch801 Rm BT';
+    color: #000;
+    font-weight: bold;
+    padding: 2%; 
+}
+.container a{
+    color: #000;
+}
+input {
+    background-color: white;
+    border-radius: 5px;
+    color: #000; 
+    border: 2px;
+    width: 300px;
+    height: 40px;
+}
+
+.button{
+    color: #000; 
+    background-color: #D7AB1E;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    height: 40px;
+    width: 250px;
+    align-self: center;
+    font-family: 'Dutch801 Rm BT';
+    font-size: 20px;
+}
+.container a:hover{
+    color: #D7AB1E;
+}
+
+.imageLogo{
+    object-fit:scale-down;
+     height: max-content;
+     width: 300px;
+     align-content:center;
+}
+.iniciarSesion{
+    font-size: 30px;
+}
