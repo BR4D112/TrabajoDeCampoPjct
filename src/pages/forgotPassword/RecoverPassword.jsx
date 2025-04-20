@@ -1,22 +1,36 @@
+import { useState } from "react";
 import { Button } from "../../components/Button/Button";
+import {Input} from "../../components/inputs/Input";
+import styles from './styles/Recover.module.css';
 
 export const RecoverPassword = () => {
+    const [email, setEmail] = useState('');
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        const email = e.target.email.value;
-        // Aquí puedes agregar la lógica para enviar el correo de recuperación
-        console.log('Correo enviado a:', email);
+        if (email) {
+            console.log('Correo enviado a:', email);
+        } else {
+            console.log('Por favor, ingrese un correo válido.');
+        }
     }
     return (
-        <div>
+        <>
             <h1>Recuperar Contraseña</h1>
-            <form>
+            <form className={styles.Form} onSubmit={handleSubmit}>
                 <label>Correo Electrónico</label>
-                <input type="email" placeholder="Ingrese su correo" required />
-                <Button text={"enviar"} 
-                 onClick={handleSubmit}
+                <input 
+                    type="email" 
+                    required
+                    onChange ={(e)=>{setEmail(e.target.value)}}
+                    placeholder="Ingrese su correo"
+                />
+                
+                <Button 
+                    text={"enviar"} 
+                    type="submit"
                 /> 
             </form>
-        </div>
+        </>
     )
 }

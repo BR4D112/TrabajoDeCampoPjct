@@ -1,7 +1,6 @@
+import { RECOVER_URL } from '../../../API/Endpoints.js';
+const url = RECOVER_URL;
 export function recoverFetch(email) {
-    const url = process.env.NODE_ENV === 'production' 
-        ? process.env.REACT_APP_API_URL_PROD + '/recover' 
-        : process.env.REACT_APP_API_URL_DEV + '/recover';
     let response;
     try {
         response = fetch(url, {

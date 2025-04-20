@@ -2,7 +2,6 @@
 import { MainPage } from './pages/login/MainPage'
 import { RecoverPassword } from './pages/forgotPassword/RecoverPassword';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import './App.css'
 
 function App() {
   return (
@@ -10,9 +9,20 @@ function App() {
       <Routes>
         <Route path='/' element={<MainPage/> }/>
         <Route path='/recover' element={<RecoverPassword/> }/>
+        <Route path='/welcome' element={<Welcome/> }/>
       </Routes>
     </Router>
   )
 }
-
+function Welcome() {
+  const user = JSON.parse(localStorage.getItem("user")); // Convertir el JSON a objeto
+  console.log(user);
+  
+  return (
+    <div>
+      <h1>Bienvenido</h1>
+      <p>Esta es la página de bienvenida, {user?.first_name}.</p>
+    </div>
+  );
+}
 export default App;

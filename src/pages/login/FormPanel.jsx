@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import styles from './styles/FormPanel.module.css';
+import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
 import logoApp from '../../assets/Logo.png';
 import { Button } from '../../components/Button/Button.jsx';
-import auth from './services/LoginAuth.js';
+import {auth, testAuth} from './services/LoginAuth.js';
+import styles from './styles/FormPanel.module.css';
 
 const LOGIN_STATES = {
     SUCCESS: 'success',
@@ -11,24 +13,48 @@ const LOGIN_STATES = {
 } 
 
 export const FormPanel = () => {
+    const navegate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [loginState, setLoginState] = useState(null);
+    const [error, setError] = useState('error desconocido');
+    
+    let result = '';
     
     const handleLogin = async (e) =>{
-        e.preventDefault(); 
-        let result = '';
+        //evitamos que se recargue la pagina al inicio
+        e.preventDefault();
+        setLoginState(LOGIN_STATES.LOADING);
+    
         try {
-            result = await auth(email, password)            
-            alert(result.text());
-        } catch (error) {
-            console.log();
+            result = await testAuth(email, password)
+            console.log(result);
+            if (result) {
+                if (result.status === LOGIN_STATES.SUCCESS) {
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    navegate('/welcome');
+                } else {
+                    setError(result?.message || 'Error al iniciar sesión.');
+                    setLoginState(LOGIN_STATES.ERROR);
+                    toast.error(error)
+                }
+            } else {
+                setLoginState(LOGIN_STATES.ERROR);
+                toast.error('Sin respuesta del servidor')
+            }
+        } catch (errorCatch) {
+            // Cuando el metodo auth manda un  throw New Error
+            console.log(errorCatch);            
+            setError('Error de conexión. Intente nuevamente.');
+            setLoginState(LOGIN_STATES.ERROR);
+            toast.error(error)
         } 
     }
 
-
     return (
         <div className={styles.container}>
+            <Toaster richColors position="top-center" />
             <img src={logoApp} className={styles.imageLogo} />
             <h2 className={styles.iniciarSesion}>
             Iniciar Sesión
@@ -38,14 +64,15 @@ export const FormPanel = () => {
             <form action="" onSubmit={handleLogin} className={styles.formLogin}>
                 <label>Correo</label>
                 <input 
+                // value={email}
                 type="email" 
                 className={styles.inputLogin} 
                 placeholder='Ingrese el correo' 
                 onChange={(e)=>{setEmail(e.target.value)}}
                 required 
                 />
-
                 <label>Contraseña</label>
+                
                 <input
                 type="password"
                 className={styles.inputPassword}
@@ -53,7 +80,8 @@ export const FormPanel = () => {
                 onChange={(e)=>{setPassword(e.target.value)}}
                 required 
                 />
-                <Button text={"Iniciar Sesión"}/>
+                
+                <Button text={"Iniciar Sesión"} type={"submit"}/>
             </form>
             <a href="/recover">¿Olvidó su contraseña?</a>
         </div>
