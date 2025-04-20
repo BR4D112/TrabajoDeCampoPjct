@@ -1,6 +1,3 @@
-BR4D112: Crea el readme.md, en español, aclara que use el pnpm run dev, y que para hacer las pruebas del login, se hace cambia el metodo en el FormPanel, igual está incluido el .env.development y se usa 
-
-GitHub Copilot: ```markdown
 # TrabajoDeCampoPjct
 
 Este proyecto es una aplicación React diseñada para gestionar el inicio de sesión y otras funcionalidades relacionadas. A continuación, se detallan las instrucciones para ejecutar el proyecto y realizar pruebas.
