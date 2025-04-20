@@ -27,7 +27,8 @@ export const FormPanel = () => {
         setLoginState(LOGIN_STATES.LOADING);
     
         try {
-            result = await testAuth(email, password)
+            result = await 
+            testAuth(email, password) //Para hacer testing cambio este metodo por auth(email, password)
             console.log(result);
             if (result) {
                 if (result.status === LOGIN_STATES.SUCCESS) {
