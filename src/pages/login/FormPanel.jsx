@@ -30,26 +30,21 @@ export const FormPanel = () => {
             result = await 
             testAuth(email, password) //Para hacer testing cambio este metodo por auth(email, password)
             console.log(result);
-            if (result) {
-                if (result.status === LOGIN_STATES.SUCCESS) {
-                    localStorage.setItem('token', result.token);
-                    localStorage.setItem('user', JSON.stringify(result.user));
-                    navegate('/welcome');
-                } else {
-                    setError(result?.message || 'Error al iniciar sesión.');
-                    setLoginState(LOGIN_STATES.ERROR);
-                    toast.error(error)
-                }
+            if (result && result.token) {
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user));
+                navegate('/welcome'); 
             } else {
+                setError(result?.message || 'Error al iniciar sesión.');
                 setLoginState(LOGIN_STATES.ERROR);
-                toast.error('Sin respuesta del servidor')
+                toast.error(error)
             }
         } catch (errorCatch) {
-            // Cuando el metodo auth manda un  throw New Error
-            console.log(errorCatch);            
+            // Cuando el metodo auth manda un throw New Error
+            console.log(errorCatch);
             setError('Error de conexión. Intente nuevamente.');
             setLoginState(LOGIN_STATES.ERROR);
-            toast.error(error)
+            toast.error('Error de conexión');
         } 
     }
 
