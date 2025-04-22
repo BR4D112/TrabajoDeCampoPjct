@@ -2,6 +2,7 @@
 import { MainPage } from './pages/login/MainPage'
 import { RecoverPassword } from './pages/forgotPassword/RecoverPassword';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { RecoverPassword as Second} from './pages/forgotPassword/SecondVersionRecover';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path='/' element={<MainPage/> }/>
         <Route path='/recover' element={<RecoverPassword/> }/>
         <Route path='/welcome' element={<Welcome/> }/>
+        <Route path='/second' element={<Second/> }/>
       </Routes>
     </Router>
   )

@@ -5,3 +5,4 @@ export const RECOVER_URL = `${envConfig.apiUrl}/auth/recover`;
 export const REGISTER_URL = `${envConfig.apiUrl}/auth/register`;
 export const LOGOUT_URL = `${envConfig.apiUrl}/auth/logout`;
 export const USER_URL = `${envConfig.apiUrl}/user`;
+export const PASSWORD_RESET = `${envConfig.apiUrl}/user`;

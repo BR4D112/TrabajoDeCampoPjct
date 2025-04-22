@@ -28,7 +28,7 @@ export const FormPanel = () => {
     
         try {
             result = await 
-            testAuth(email, password) //Para hacer testing cambio este metodo por auth(email, password)
+            auth(email, password) //Para hacer testing cambio este metodo de auth(email, password) testAuth(email,password)
             console.log(result);
             if (result && result.token) {
                 localStorage.setItem('token', result.token);
@@ -44,7 +44,7 @@ export const FormPanel = () => {
             console.log(errorCatch);
             setError('Error de conexión. Intente nuevamente.');
             setLoginState(LOGIN_STATES.ERROR);
-            toast.error('Error de conexión');
+            toast.error(errorCatch.message);
         } 
     }
 
@@ -60,7 +60,6 @@ export const FormPanel = () => {
             <form action="" onSubmit={handleLogin} className={styles.formLogin}>
                 <label>Correo</label>
                 <input 
-                // value={email}
                 type="email" 
                 className={styles.inputLogin} 
                 placeholder='Ingrese el correo' 
