@@ -1,0 +1,35 @@
+.TopBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #424242;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+.LogoContainer {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.Logo {
+    height: 70px;
+    margin-right: 20px;
+}
+
+.Title {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+}
+
+.ButtonContainer {
+    flex: 0 0 auto;
+}

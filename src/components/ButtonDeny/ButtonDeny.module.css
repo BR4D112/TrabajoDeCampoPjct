@@ -1,6 +1,6 @@
-.button{
-    color: #000; 
-    background-color: #D7AB1E;
+.button {
+    color: white; 
+    background-color: #424242;
     font-weight: bold;
     border-radius: 8px;
     border: 2px solid black; /* <-- Borde blanco y de 2px */

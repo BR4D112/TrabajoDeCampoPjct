@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "../../components/Button/Button";
+import { ButtonDeny } from "../../components/ButtonDeny/ButtonDeny"; // <-- importa tu ButtonDeny si no lo tienes
+import { TopBar } from "../../components/TopBar/TopBar"; // Nuevo import
 import styles from './styles/Recover.module.css';
 import { sendingEmail, sendingNewPassword } from "./services/RecoverFetch";
-import logoNegative from "../../assets/logo-negative.png";
 import { Toaster, toast } from "sonner";
 
 export const RecoverPassword = () => {
@@ -19,6 +20,11 @@ export const RecoverPassword = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [status, setStatus] = useState(RECOVER_STATE.IDLE);
+
+    const handleSetEmail = (e) => {
+        e.preventDefault();
+        setEmail(e.target.value);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,47 +52,6 @@ export const RecoverPassword = () => {
         }
     };
 
-    const Header = () => (
-        <header className={styles.Header}>
-            <a href="/">
-                <img src={logoNegative} alt="Logo regresar al inicio" />
-            </a>
-            <h1>Sistema de Asignación y Gestión Educativa</h1>
-        </header>
-    );
-
-    const RecoverForm = () => (
-        <div className={styles.Container}>
-            <h2>Recuperar cuenta</h2>
-            <p>Ingrese su correo de inicio de sesión. Allí se enviará un enlace de instrucciones para el restablecimiento.</p>
-            <form 
-            className={styles.Form} onSubmit={handleSubmit}>
-                <label>Correo Electrónico</label>
-                <input
-                type="email"
-                value={email} // Vincula el input al estado
-                onChange={handleSetEmail} // Actualiza el estado al escribir
-                placeholder="Ingrese su correo electrónico"
-                required
-                />
-                <div className={styles.ButtonGroup}>
-                    <Button text="Cancelar" type="button" onClick={() => setStatus(RECOVER_STATE.IDLE)} />
-                    <Button text="Aceptar" type="submit" />
-                </div>
-            </form>
-            {
-                email !== '' && (
-                    <div>
-                        <p>Correo electrónico ingresado: {email}</p>
-                    </div>
-                )
-            }
-        </div>
-    );
-    const handleSetEmail = (e) => {
-        e.preventDefault();
-        setEmail(e.target.value);
-    }
     const PasswordForm = () => (
         <div className={styles.Container}>
             <h2>Restablecer contraseña</h2>
@@ -94,8 +59,8 @@ export const RecoverPassword = () => {
                 <label>Contraseña</label>
                 <input
                     type="password"
-                    value={password} // Vincula el input al estado
-                    onChange={(e) => setPassword(e.target.value)} // Actualiza el estado al escribir
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Ingrese su nueva contraseña"
                     required
                 />
@@ -110,38 +75,38 @@ export const RecoverPassword = () => {
     return (
         <div className={styles.Page}>
             <Toaster position="top-center" richColors closeButton={false} expand={false} theme="dark" />
-            <Header />
-            {status === RECOVER_STATE.IDLE || status === RECOVER_STATE.INVALID_EMAIL ? (
-                //en este componente lo cambié para no hacer re renderizado, el metodo RecoverForm 
-                <div className={styles.Container}>
-                <h2>Recuperar cuenta</h2>
-                <p>Ingrese su correo de inicio de sesión. Allí se enviará un enlace de instrucciones para el restablecimiento.</p>
-                <form 
-                className={styles.Form} onSubmit={handleSubmit}>
-                    <label>Correo Electrónico</label>
-                    <input
-                    type="email"
-                    value={email} // Vincula el input al estado
-                    onChange={handleSetEmail} // Actualiza el estado al escribir
-                    placeholder="Ingrese su correo electrónico"
-                    required
-                    />
-                    <div className={styles.ButtonGroup}>
-                        <Button text="Cancelar" type="button" onClick={() => setStatus(RECOVER_STATE.IDLE)} />
-                        <Button text="Aceptar" type="submit" />
+            <TopBar /> {/* Aquí se usa el componente reutilizable */}
+            {
+                status === RECOVER_STATE.IDLE || status === RECOVER_STATE.INVALID_EMAIL ? (
+                    <div className={styles.Box}>
+                        <h2>Recuperar cuenta</h2>
+                        <p>Ingrese su correo de inicio de sesión. Allí se enviará un enlace de instrucciones para el restablecimiento.</p>
+                        <form className={styles.Form} onSubmit={handleSubmit}>
+                            <label>Correo Electrónico</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={handleSetEmail}
+                                placeholder="Ingrese su correo electrónico"
+                                required
+                            />
+                            <div className={styles.ButtonGroup}>
+                                <ButtonDeny text="Cancelar" type="button" onClick={() => setStatus(RECOVER_STATE.IDLE)} />
+                                <Button text="Aceptar" type="submit" />
+                            </div>
+                        </form>
+                        {
+                            email !== '' && (
+                                <div>
+                                    <p>Correo electrónico ingresado: {email}</p>
+                                </div>
+                            )
+                        }
                     </div>
-                </form>
-                {
-                    email !== '' && (
-                        <div>
-                            <p>Correo electrónico ingresado: {email}</p>
-                        </div>
-                    )
-                }
-            </div>
-            ) : (
-                <PasswordForm />
-            )}
+                ) : (
+                    <PasswordForm />
+                )
+            }
         </div>
     );
 };

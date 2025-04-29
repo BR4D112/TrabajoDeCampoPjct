@@ -5,11 +5,37 @@
     width: 100%;
     height: 100%;
 }
-.Header{
+
+.Page {
+    background-color: white; /* Fondo blanco */
+    color: black;
+    min-height: 100vh; /* Para que cubra toda la altura de la pantalla */
+    min-width: 100vw; /* Para que cubra toda la anchura de la pantalla */
+    padding-top: 60px; /* Espacio para que no tape el TopBar fijo */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+}
+
+.Box {
+    background-color: #424242   ; /* Fondo blanco para la caja */
+    color: white;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 20px; /* Bordes redondeados */
+    padding: 30px; /* Espaciado interno */
     width: 100%;
-    height: 10%;
-    background-color: gray;
+    max-width: 500px; /* Máximo ancho de la caja */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ButtonGroup {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Opcional: centra los botones */
+    gap: 16px; /* Separación entre los botones */
+    width: 100%;
 }

@@ -1,0 +1,101 @@
+.TopBar {
+    width: 100%;
+    height: 60px;
+    background-color: #424242;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Cambia de space-between a center */
+    padding: 0 24px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    position: relative;
+}
+
+
+
+.Title {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.UserSection {
+    position: absolute;
+    right: 24px; /* Misma separación que tu padding */
+    display: flex;
+    align-items: center;
+}
+
+.UserLogo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.UserLogo:hover {
+    transform: scale(1.1);
+}
+
+.LogoContainer {
+    position: absolute;
+    left: 24px; /* Igual que tu padding */
+    display: flex;
+    align-items: center;
+}
+
+.Logo {
+    height: 70px;
+}
+
+
+.DropdownMenu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.3s ease-in-out;
+    min-width: 150px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+    .TopBar {
+        padding: 0 16px;
+        height: 60px;
+    }
+
+    .Title {
+        font-size: 18px;
+    }
+
+    .UserLogo {
+        width: 40px;
+        height: 40px;
+    }
+}
