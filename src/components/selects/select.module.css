@@ -1,0 +1,30 @@
+.selectContainer {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Dutch801 Rm BT';
+}
+
+.selectContainer label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #FFFFFF; /* Texto fuera del select */
+}
+
+.customSelect {
+  width: 300px;
+  height: 40px;
+  padding: 0.5rem;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  transition: border-color 0.3s ease;
+  font-family: 'Dutch801 Rm BT'; /* Aplica la fuente también aquí */
+  color: #000000; /* Texto dentro del select */
+}
+
+.customSelect:focus {
+  border-color: #007bff;
+  outline: none;
+}

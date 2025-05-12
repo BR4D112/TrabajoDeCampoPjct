@@ -1,0 +1,34 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #424242; /* Fondo solicitado */
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  font-family: 'Dutch801 Rm BT', sans-serif;
+  color: white; /* Color de letra */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
