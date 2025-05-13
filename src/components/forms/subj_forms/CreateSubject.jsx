@@ -13,7 +13,6 @@ const CrearMateria = ({ token }) => {
         <div>
           {/* Muestra el formulario de creación de materias */}
           <SubjectFormGroup
-            academic_period_id={config.academic_period_id}
             semester={config.semester}
             subjectCount={config.subjectCount}
           />

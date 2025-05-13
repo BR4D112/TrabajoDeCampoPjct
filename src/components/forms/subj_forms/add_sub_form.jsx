@@ -67,14 +67,14 @@ const SubjectFormGroup = ({ academic_period_id, semester, subjectCount }) => {
   // Función para mapear el componente del usuario al valor aceptado por el backend
   const mapComponentValue = (value) => {
     const mapping = {
-      "Proyectual": "tecnica",
-      "Historia y teoría": "teorica",
+      "Proyectual": "proyectual",
+      "Historia y teoría": "historia y teoria",
       "Tecnológico": "tecnica",
-      "Expresión": "tecnica",
-      "Urbano - ambiental": "teorica",
-      "Electivo - disciplinar": "multidisciplinaria",
-      "Electivo - multidisciplinar": "multidisciplinaria",
-      "Institucional": "multidisciplinaria",
+      "Expresión": "expresion",
+      "Urbano - ambiental": "urbano ambiental",
+      "Electivo - disciplinar": "electivo disciplinar",
+      "Electivo - multidisciplinar": "electivo multidisciplinar",
+      "Institucional": "institucional",
     };
 
     return mapping[value] || "tecnica"; // Por defecto, "tecnica" si no se encuentra el valor

@@ -9,7 +9,6 @@ const CreateSubjectStarter = ({ onContinue }) => {
 
   const handleContinue = () => {
     onContinue({
-      academic_period_id: selectedPeriod,
       semester: parseInt(semester),
       subjectCount: parseInt(numSubjects),
     });
@@ -18,16 +17,6 @@ const CreateSubjectStarter = ({ onContinue }) => {
   return (
     <div style={{ padding: "2rem" }}>
       <h2>Configurar creación de materias</h2>
-      <Select
-        label="Periodo Académico"
-        name="academic_period_id"
-        value={selectedPeriod}
-        options={[
-          { value: "2025-2", label: "2025-2" },
-          { value: "2026-1", label: "2026-1" }
-        ]}
-        onChange={(e) => setSelectedPeriod(e.target.value)}
-      />
       <Select
         label="Semestre"
         name="semester"

@@ -3,11 +3,15 @@ import { Button } from '../Button/Button';
 import { ButtonDeny } from '../ButtonDeny/ButtonDeny';
 import Input from '../inputs/Input';
 
-const SearchModal = ({ title = "Buscar", placeholder = "Ingrese su búsqueda", onSearch, onCancel }) => {
+const SearchModal = ({ title = "Buscar", placeholder = "Ingrese su búsqueda", onConfirm, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const query = e.target.elements.query.value;
-    onSearch(query);
+    if (typeof onConfirm === 'function') {
+      onConfirm(query);
+    } else {
+      console.warn("onConfirm no es una función");
+    }
   };
 
   return (

@@ -9,16 +9,20 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem; /* Evita corte en pantallas pequeñas */
 }
 
 .modal {
   background-color: #424242; /* Fondo solicitado */
   padding: 2rem;
   border-radius: 10px;
-  width: 400px;
+  width: 90%;
+  max-width: 800px; /* Más ancho para contenido extenso */
   font-family: 'Dutch801 Rm BT', sans-serif;
-  color: white; /* Color de letra */
+  color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  max-height: 90vh; /* Limita la altura total del modal */
+  overflow-y: auto;  /* Scroll vertical dentro del modal */
 }
 
 h2 {
