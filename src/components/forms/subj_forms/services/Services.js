@@ -5,7 +5,7 @@ const fetchAcademicPeriods = async (token) => {
   try {
     const res = await fetch(SEARCH_ACADEMIC_PERIOD, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Agregar el token si es necesario
+        'Authorization': `${token}`, // Agregar el token si es necesario
       },
     });
 
