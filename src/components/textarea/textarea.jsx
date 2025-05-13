@@ -1,4 +1,4 @@
-import styles from './Textarea.module.css';
+import styles from './textarea.module.css'; // se reconocen y diferencian mayusculas y minusculas
 
 function Textarea({ name, placeholder, value, onChange }) {
   return (
