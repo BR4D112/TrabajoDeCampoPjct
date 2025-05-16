@@ -45,10 +45,19 @@ export function Sidebar({ first_name, setSection }) {
             <img src={addAulaIcon} alt="Crear Aula" className={styles.icon} />
             Crear Aula
           </button>
-          <button className={styles['sidebar-btn']} onClick={() => setSection('editar-materia')}>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('editar-aula')}>
             <img src={editAulaIcon} alt="Editar Aula" className={styles.icon} />
             Editar Aula
           </button>
+          <h2>Reportes</h2>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-horario')}>
+            <img src={addAulaIcon} alt="Crear Reporte de Semestres" className={styles.icon} />
+            Crear Reporte de Semestres
+          </button>
+          {/* <button className={styles['sidebar-btn']} onClick={() => setSection('crear-aula')}>
+            <img src={addAulaIcon} alt="Crear Aula" className={styles.icon} />
+            Crear Aula
+          </button> */}
 
           
         </>

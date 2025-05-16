@@ -50,7 +50,7 @@ const createSubject = async (subjectData, token) => {
 const updateSubject = async (id, updatedData, token) => {
   try {
     const res = await fetch(`${UPDATE_SUBJECT}${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `${token}`,

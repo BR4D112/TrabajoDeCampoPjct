@@ -4,16 +4,19 @@ import { Button } from '../../Button/Button';
 import { ButtonDeny } from '../../ButtonDeny/ButtonDeny';
 import Input from '../../inputs/Input';
 import Select from '../../selects/select';
-import { SEARCH_DOCENTE, CREATE_GROUP, ASSIGN_TEACHER_URL } from '../../../API/Endpoints'; 
+import { SEARCH_DOCENTE, CREATE_GROUP, ASSIGN_TEACHER_URL, SEARCH_GROUP } from '../../../API/Endpoints'; 
 import AssignTeacherModal from './AssignTeacherModal';
 
 const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
   const [teachers, setTeachers] = useState([]);
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([]); // grupos existentes
   const [isAssignTeacherModalOpen, setAssignTeacherModalOpen] = useState(false);
+  const [newlyCreatedGroups, setNewlyCreatedGroups] = useState([]); // nuevos grupos creados
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+
+    // Cargar docentes
     fetch(SEARCH_DOCENTE, {
       headers: {
         Authorization: `${token}`,
@@ -29,20 +32,45 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
         )
       )
       .catch((err) => console.error('Error al cargar docentes:', err));
-  }, []);
+
+    // Cargar grupos existentes por materia
+    if (subject?.id) {
+      const subjectId = Number(subject.id);
+      fetch(`${SEARCH_GROUP}?subject_id=${subjectId}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('No se pudieron obtener los grupos');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log('Grupos existentes:', data);
+          setGroups(data); // ✅ Guardar grupos existentes
+        })
+        .catch((err) => console.error('Error al cargar grupos:', err));
+    }
+  }, [subject]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    const existingCount = groups.length;
 
-    const formData = Array.from({ length: count }).map((_, i) => ({
-      code: `${subject.code}-G${i + 1}`,
-      number: i + 1,
-      capacity: parseInt(e.target[`capacity-${i}`].value),
-      is_active: true,
-      comments: e.target[`comments-${i}`].value,
-      subject_id: subject.id,
-    }));
+    const formData = Array.from({ length: count }).map((_, i) => {
+      const groupNumber = existingCount + i + 1;
+      return {
+        code: `${subject.code}-G${groupNumber}`,
+        number: groupNumber,
+        capacity: parseInt(e.target[`capacity-${i}`].value),
+        is_active: true,
+        comments: e.target[`comments-${i}`].value,
+        subject_id: Number(subject.id),
+      };
+    });
 
     try {
       const responses = await Promise.all(
@@ -63,13 +91,12 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
         )
       );
 
-      console.log('Todos los grupos fueron creados:', responses);
-      alert('Grupos creados exitosamente.');
-      setGroups(responses); // Guardamos los grupos para la asignación posterior
-      setAssignTeacherModalOpen(true); // Abrimos el modal de asignación de docentes
+      // Guardamos solo los nuevos grupos creados
+      setNewlyCreatedGroups(responses);
+      setAssignTeacherModalOpen(true); // abrir modal de asignación
     } catch (error) {
-      console.error('Error:', error);
-      alert('Hubo un error al crear uno o más grupos.');
+      console.error('Error al crear grupos:', error);
+      alert('Hubo un error al crear los grupos.');
     }
   };
 
@@ -104,7 +131,7 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
         <form onSubmit={handleSubmit}>
           {Array.from({ length: count }).map((_, i) => (
             <div key={i} style={{ marginBottom: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}>
-              <h4>Grupo {i + 1}</h4>
+              <h4>Grupo {groups.length + i + 1}</h4>
               <Input name={`capacity-${i}`} type="number" placeholder="Cupo máximo" required />
               <Input name={`comments-${i}`} placeholder="Comentarios" />
             </div>
@@ -115,10 +142,13 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
           </div>
         </form>
       </div>
+
       {isAssignTeacherModalOpen && (
         <AssignTeacherModal
-          groups={groups} 
-          onClose={() => setAssignTeacherModalOpen(false)} 
+          groups={newlyCreatedGroups} // ✅ solo nuevos grupos
+          onClose={() => setAssignTeacherModalOpen(false)}
+          teachers={teachers}
+          onAssign={assignTeacher}
         />
       )}
     </div>
