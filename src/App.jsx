@@ -1,19 +1,34 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
+
+// Pages
 import { MainPage } from './pages/login/MainPage';
 import { RecoverPassword } from './pages/forgotPassword/RecoverPassword';
 import { RecoverPassword as Second } from './pages/forgotPassword/SecondVersionRecover';
+
+// Layout components
 import { TopBarLoggedUser } from './components/TopBarLogguedUser/TopBarLogguedUser';
 import { Sidebar } from './components/Sidebar/Sidebar';
+
+// Docente forms
 import DocForm from './components/forms/doc_forms/add_doc_form';
 import EditDocenteForm from './components/forms/doc_forms/doc_form_edit/edit_doc_form';
-import SearchModal from './components/modal/SearchModal';
-import ConfirmModal from './components/modal/ConfirmModal';
 import SearchResultsList from './components/forms/doc_forms/doc_form_edit/SearchResultsList';
 import { searchDocentes } from './components/forms/doc_forms/services/TeacherService';
+
+// Materia forms
 import CreateSubject from './components/forms/subj_forms/CreateSubject';
+import EditSubject from './components/forms/subj_forms/EditSubject';
+import EditSubjectSelector from './components/forms/subj_forms/EditSubjectSelector';
+import { searchSubjects } from './components/forms/subj_forms/services/SubServices';
+import GenerateSchedulePage from "./components/forms/group_forms/GenerateSchedulePage";
+
+// Grupo forms
 import CrearGrupo from './components/forms/group_forms/CreateGroup';
-import { searchSubjects } from "./components/forms/subj_forms/services/SubServices";
+
+// Modals
+import SearchModal from './components/modal/SearchModal';
+import ConfirmModal from './components/modal/ConfirmModal';
 
 function App() {
   return (
@@ -44,65 +59,50 @@ function Welcome() {
   const [selectedDocente, setSelectedDocente] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
 
-  const handleSectionChange = (newSection) => {
-    if ((section === "crear-docente" || section === "crear-materia") && formDirty) {
+const handleSectionChange = (newSection) => {
+  if ((section === "crear-docente" || section === "crear-materia") && formDirty) {
+    setPendingSection(newSection);
+    setConfirmActionType("exit");
+    setShowConfirmModal(true);
+  } else {
+    setSearchResults([]);
+    setSelectedDocente(null);
+    setSelectedSubject(null);
+
+    if (newSection === "editar-docente") {
       setPendingSection(newSection);
-      setConfirmActionType("exit");
-      setShowConfirmModal(true);
+      setShowSearchModal(true);
+    } else if (newSection === "editar-materia") {
+      setSection(newSection);
     } else {
-      setSearchResults([]);
-      setSelectedDocente(null);
-      setSelectedSubject(null);
-
-      if (newSection === "editar-docente" || newSection === "editar-materia") {
-        setPendingSection(newSection);
-        setShowSearchModal(true);
-      } else {
-        setSection(newSection);
-      }
+      setSection(newSection);
     }
-  };
-
-  const handleSearchConfirm = async (term) => {
-    try {
-      setSelectedDocente(null);
-      setSearchResults([]);
-      const token = localStorage.getItem("token");
-      const results = await searchDocentes(term, token);
-      setSearchResults(results);
-      setSearchTerm(term);
-      setShowSearchModal(false);
-      setSection("editar-docente");
-    } catch (err) {
-      alert("Error al buscar docentes: " + err.message);
-    }
-  };
-
-const handleSearchModalConfirm = async (term) => {
-  try {
-    const token = localStorage.getItem("token");
-    let results = [];
-
-    if (pendingSection === "editar-docente") {
-      const res = await searchDocentes(term, token);
-      results = res;
-      setSelectedDocente(null);
-    } else if (pendingSection === "editar-materia") {
-      const res = await searchSubjects(term, token); // Aquí se utiliza searchSubjects
-      results = res;
-      setSelectedSubject(null);
-    }
-
-    setSearchResults(results);
-    setSearchTerm(term);
-    setShowSearchModal(false);
-    setSection(pendingSection);
-    setPendingSection("");
-  } catch (err) {
-    alert("Error al buscar: " + err.message);
   }
 };
 
+
+  const handleSearchModalConfirm = async (term) => {
+    try {
+      const token = localStorage.getItem("token");
+      let results = [];
+
+      if (pendingSection === "editar-docente") {
+        results = await searchDocentes(term, token);
+        setSelectedDocente(null);
+      } else if (pendingSection === "editar-materia") {
+        results = await searchSubjects(term, token);
+        setSelectedSubject(null);
+      }
+
+      setSearchResults(results);
+      setSearchTerm(term);
+      setShowSearchModal(false);
+      setSection(pendingSection);
+      setPendingSection("");
+    } catch (err) {
+      alert("Error al buscar: " + err.message);
+    }
+  };
 
   const confirmExit = () => {
     if (confirmActionType === "exit") {
@@ -146,55 +146,49 @@ const handleSearchModalConfirm = async (term) => {
           />
         );
       case 'editar-docente':
-        if (!selectedDocente) {
-          return (
-            <SearchResultsList
-              results={searchResults}
-              onSelect={(docente) => {
-                setSelectedDocente(docente);
-              }}
-            />
-          );
-        } else {
-          return (
-            <EditDocenteForm
-              initialData={selectedDocente}
-              onFormDirty={setFormDirty}
-              onSubmitRequest={() => {
-                setFormDirty(false);
-                setSelectedDocente(null);
-                setSection("");
-              }}
-            />
-          );
-        }
+        return !selectedDocente ? (
+          <SearchResultsList
+            results={searchResults}
+            onSelect={setSelectedDocente}
+          />
+        ) : (
+          <EditDocenteForm
+            initialData={selectedDocente}
+            onFormDirty={setFormDirty}
+            onSubmitRequest={() => {
+              setFormDirty(false);
+              setSelectedDocente(null);
+              setSection("");
+            }}
+          />
+        );
       case 'crear-materia':
         return <CreateSubject />;
+
       case 'editar-materia':
-        if (!selectedSubject) {
-          return (
-            <SearchResultsList
-              results={searchResults}
-              onSelect={(subject) => {
-                setSelectedSubject(subject);
-              }}
-            />
-          );
-        } else {
-          return (
-            <EditSubjectForm
-              initialData={selectedSubject}
-              onFormDirty={setFormDirty}
-              onSubmitRequest={() => {
-                setFormDirty(false);
-                setSelectedSubject(null);
-                setSection("");
-              }}
-            />
-          );
-        }
+        return !selectedSubject ? (
+          <EditSubjectSelector
+            onBack={() => setSection("")}
+            onSelect={setSelectedSubject}
+          />
+        ) : (
+          <EditSubject
+            initialData={selectedSubject}
+            onFormDirty={setFormDirty}
+            onSubmitRequest={() => {
+              setFormDirty(false);
+              setSelectedSubject(null);
+              setSection("");
+            }}
+          />
+        );
+
       case 'crear-grupo':
         return <CrearGrupo />;
+
+      case 'ver-horario':
+        <div>Crear Reporte de Semestres</div>;
+        return <GenerateSchedulePage />;
       default:
         return <div>Selecciona una opción</div>;
     }
