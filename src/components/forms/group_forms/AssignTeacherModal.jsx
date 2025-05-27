@@ -4,9 +4,10 @@ import styles from '../../modal/SearchModal.module.css';
 import { Button } from '../../Button/Button';
 import { ButtonDeny } from '../../ButtonDeny/ButtonDeny';
 import Select from '../../selects/select';
-import { SEARCH_DOCENTE, SEARCH_SESSION, SEARCH_CLASSROOM, ASSIGN_TEACHER_URL, UPDATE_SESSION } from '../../../API/Endpoints';
+import { CREATE_SESSION, SEARCH_DOCENTE, SEARCH_SESSION, SEARCH_CLASSROOM, ASSIGN_TEACHER_URL, UPDATE_SESSION } from '../../../API/Endpoints';
 
-const AssignTeacherModal = ({ groups, onClose }) => {
+
+const AssignTeacherModal = ({ groups, sessionCount, onClose }) => {
   const [teachers, setTeachers] = useState([]);
   const [assignments, setAssignments] = useState({});
   const [sessionsByGroup, setSessionsByGroup] = useState({});
@@ -55,26 +56,18 @@ const AssignTeacherModal = ({ groups, onClose }) => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const newForms = {};
     groups.forEach(group => {
-      fetch(`${SEARCH_SESSION}?group_id=${group.id}`, {
-        headers: { Authorization: `${token}` },
-      })
-        .then(res => res.json())
-        .then(data => {
-          setSessionsByGroup(prev => ({ ...prev, [group.id]: data }));
-          setSessionForms(prev => ({
-            ...prev,
-            [group.id]: data.map(session => ({
-              day: session.day || '',
-              hour: session.hour || '',
-              classroom_id: session.classroom_id || '',
-            })),
-          }));
-        })
-        .catch(err => console.error(`Error al cargar sesiones del grupo ${group.id}:`, err));
+      newForms[group.id] = Array.from({ length: sessionCount }).map(() => ({
+        day: '',
+        start_time: '',
+        end_time: '',
+        classroom_id: '',
+      }));
     });
-  }, [groups]);
+    setSessionForms(newForms);
+  }, [groups, sessionCount]);
+
 
   const handleSelectChange = (groupId, teacherId) => {
     setAssignments(prev => ({ ...prev, [groupId]: teacherId }));
@@ -97,6 +90,19 @@ const AssignTeacherModal = ({ groups, onClose }) => {
     return `${paddedHour}:${minute}:00`;
   };
 
+  const calculateDuration = (start, end) => {
+    const [startHour] = start.split(":").map(Number);
+    const [endHour] = end.split(":").map(Number);
+
+    if (endHour <= startHour) {
+      throw new Error("La hora de fin debe ser mayor que la hora de inicio");
+    }
+
+    return endHour - startHour;
+  };
+
+
+
   const handleAssignTeachers = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -117,22 +123,17 @@ const AssignTeacherModal = ({ groups, onClose }) => {
           const updatedForms = sessionForms[group.id];
 
           await Promise.all(
-            sessions.map((session, i) => {
-              const updated = updatedForms[i];
+            sessionForms[group.id].map((form) => {
               const payload = {
-                day_of_week: updated.day.charAt(0).toUpperCase() + updated.day.slice(1),
-                start_time: formatHour(updated.hour),
+                group_id: group.id,
+                day_of_week: form.day.charAt(0).toUpperCase() + form.day.slice(1),
+                start_time: formatHour(form.start_time),
+                duration_hours: calculateDuration(form.start_time, form.end_time),
+                classroom_id: parseInt(form.classroom_id),
               };
 
-              // Solo incluir classroom_id si hay uno seleccionado
-              if (updated.classroom_id) {
-                payload.classroom_id = updated.classroom_id;
-              }
-
-              console.log(`Actualizando sesión ID ${session.id}:`, payload); // <-- Debug
-
-              return fetch(`${UPDATE_SESSION}/${session.id}`, {
-                method: 'PATCH',
+              return fetch(CREATE_SESSION, {
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: `${token}`,
@@ -141,6 +142,8 @@ const AssignTeacherModal = ({ groups, onClose }) => {
               });
             })
           );
+
+          
         })
       );
 
@@ -171,33 +174,49 @@ const AssignTeacherModal = ({ groups, onClose }) => {
                 options={teachers}
                 onChange={(e) => handleSelectChange(group.id, parseInt(e.target.value))}
               />
-              {sessionForms[group.id] &&
-                sessionForms[group.id].map((session, index) => (
-                  <div key={index} style={{ marginTop: '1rem', border: '1px solid #ccc', padding: '1rem' }}>
-                    <h5>Sesión {index + 1}</h5>
-                    <Select
-                      name={`day-${group.id}-${index}`}
-                      label="Día de la semana"
-                      options={daysOfWeek}
-                      value={session.day}
-                      onChange={(e) => handleSessionChange(group.id, index, 'day', e.target.value)}
-                    />
-                    <Select
-                      name={`hour-${group.id}-${index}`}
-                      label="Hora"
-                      options={hours}
-                      value={session.hour}
-                      onChange={(e) => handleSessionChange(group.id, index, 'hour', e.target.value)}
-                    />
-                    <Select
-                      name={`classroom-${group.id}-${index}`}
-                      label="Aula"
-                      options={classrooms}
-                      value={session.classroom_id}
-                      onChange={(e) => handleSessionChange(group.id, index, 'classroom_id', e.target.value)}
-                    />
-                  </div>
-                ))}
+            {sessionForms[group.id] &&
+              sessionForms[group.id].map((session, index) => (
+                <div key={index} style={{ marginTop: '1rem', border: '1px solid #ccc', padding: '1rem' }}>
+                  <h5>Sesión {index + 1}</h5>
+
+                  <Select
+                    name={`day-${group.id}-${index}`}
+                    label="Día de la semana"
+                    options={daysOfWeek}
+                    value={session.day}
+                    onChange={(e) => handleSessionChange(group.id, index, 'day', e.target.value)}
+                  />
+
+                  <Select
+                    name={`start-${group.id}-${index}`}
+                    label="Hora de inicio"
+                    options={hours}
+                    value={session.start_time}
+                    onChange={(e) => handleSessionChange(group.id, index, 'start_time', e.target.value)}
+                  />
+
+                  <Select
+                    name={`end-${group.id}-${index}`}
+                    label="Hora de fin"
+                    options={
+                      hours.filter(
+                        (h) => parseInt(h.value.split(":")[0]) > parseInt(session.start_time?.split(":")[0])
+                      )
+                    }
+                    value={session.end_time}
+                    onChange={(e) => handleSessionChange(group.id, index, 'end_time', e.target.value)}
+                  />
+
+
+                  <Select
+                    name={`classroom-${group.id}-${index}`}
+                    label="Aula"
+                    options={classrooms}
+                    value={session.classroom_id}
+                    onChange={(e) => handleSessionChange(group.id, index, 'classroom_id', e.target.value)}
+                  />
+                </div>
+            ))}
             </div>
           ))}
           <div className={styles.buttons}>

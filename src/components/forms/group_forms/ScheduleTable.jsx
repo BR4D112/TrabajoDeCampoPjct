@@ -1,8 +1,8 @@
+// ScheduleTable.jsx
 import React from "react";
 
 const hours = Array.from({ length: 13 }, (_, i) => `${7 + i}:00`);
 
-// Mapa de inglés a español
 const dayMap = {
   Monday: "Lunes",
   Tuesday: "Martes",
@@ -13,7 +13,7 @@ const dayMap = {
 
 const days = Object.values(dayMap);
 
-const ScheduleTable = ({ sessions }) => {
+const ScheduleTable = ({ sessions, teacherColor = "#000000" }) => {
   const getSessionAt = (day, hour) => {
     return sessions.find((s) => {
       if (!s.start_time || typeof s.start_time !== "string") return false;
@@ -29,10 +29,12 @@ const ScheduleTable = ({ sessions }) => {
     });
   };
 
-  console.log("Renderizando tabla con", sessions.length, "sesiones");
-
   return (
-    <table border="1" cellPadding={6} style={{ marginTop: "1rem", borderCollapse: "collapse" }}>
+    <table
+      border="1"
+      cellPadding={6}
+      style={{ marginTop: "1rem", borderCollapse: "collapse" }}
+    >
       <thead>
         <tr>
           <th>Hora</th>
@@ -55,6 +57,12 @@ const ScheduleTable = ({ sessions }) => {
                       <>
                         <strong>{session.subject_name}</strong>
                         <div>{session.group_code}</div>
+                        <div style={{ fontSize: "0.9em", color: teacherColor }}>
+                          👤 {session.teacher_name}
+                        </div>
+                        {/* <div style={{ fontSize: "0.9em", color: "#333" }}>
+                          aula: {session.classroom_name || "Sin aula"}
+                        </div> */}
                       </>
                     ) : null}
                   </td>

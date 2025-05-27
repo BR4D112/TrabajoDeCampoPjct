@@ -5,6 +5,9 @@ import addSubjectIcon from '../../assets/add_subject.png';
 import editSubjectIcon from '../../assets/edit_subject.png';
 import addAulaIcon from '../../assets/add.png';
 import editAulaIcon from '../../assets/edit.png';
+import searchDocOrUserIcon from '../../assets/search_user_or_doc.png';
+import searchSubjects from '../../assets/search_subject.png';
+import search from '../../assets/search.png';
 
 export function Sidebar({ first_name, setSection }) {
   return (
@@ -13,7 +16,6 @@ export function Sidebar({ first_name, setSection }) {
         <>
           <h2>Docentes</h2>
           <button className={styles['sidebar-btn']} onClick={() => {
-            console.log('Sección seleccionada: crear-docente');
             setSection('crear-docente')}}>
             <img src={addDocenteIcon} alt="Crear Docente" className={styles.icon} />
             Crear Docente
@@ -54,10 +56,6 @@ export function Sidebar({ first_name, setSection }) {
             <img src={addAulaIcon} alt="Crear Reporte de Semestres" className={styles.icon} />
             Crear Reporte de Semestres
           </button>
-          {/* <button className={styles['sidebar-btn']} onClick={() => setSection('crear-aula')}>
-            <img src={addAulaIcon} alt="Crear Aula" className={styles.icon} />
-            Crear Aula
-          </button> */}
 
           
         </>
@@ -71,7 +69,26 @@ export function Sidebar({ first_name, setSection }) {
 
       {first_name === 'secretary' && (
         <>
-          <button onClick={() => setSection('ver-docente')}>Ver Docentes</button>
+          <h2>Docentes</h2>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-docentes')}>
+            <img src={searchDocOrUserIcon} alt="Ver Docentes" className={styles.icon} />
+            Ver Docentes
+          </button>
+          <h2>Grupos</h2>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-grupos')}>
+            <img src={search} alt="Ver Materias y Grupos" className={styles.icon} />
+            Ver Materias y Grupos
+          </button>
+          <h2>Aulas</h2>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-aulas')}>
+            <img src={search} alt="Ver Aulas" className={styles.icon} />
+            Ver Aulas
+          </button>
+          <h2>Reportes</h2>
+          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-horario')}>
+            <img src={addAulaIcon} alt="Crear Reporte de Semestres" className={styles.icon} />
+            Crear Reporte de Semestres
+          </button>
         </>
       )}
     </div>

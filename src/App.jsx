@@ -25,10 +25,21 @@ import GenerateSchedulePage from "./components/forms/group_forms/GenerateSchedul
 
 // Grupo forms
 import CrearGrupo from './components/forms/group_forms/CreateGroup';
+import EditGroup from './components/forms/group_forms/EditGroup';
 
 // Modals
 import SearchModal from './components/modal/SearchModal';
 import ConfirmModal from './components/modal/ConfirmModal';
+
+// Aula forms
+import CreateAulaForm from './components/forms/classrooms_forms/AddAulaForm';
+import AulaEditFlow from './components/forms/classrooms_forms/AulaEditFlow';
+
+// Views
+import ViewTeachers from './components/forms/doc_forms/ViewTeachers';
+import ViewSubjects from './components/forms/subj_forms/ViewSubjects';
+import ViewGroups from './components/forms/group_forms/ViewGroups';
+import ViewClassrooms from './components/forms/classrooms_forms/ViewClassrooms';
 
 function App() {
   return (
@@ -111,7 +122,6 @@ const handleSectionChange = (newSection) => {
       setSection(pendingSection);
       setPendingSection("");
     } else if (confirmActionType === "submit") {
-      console.log("Datos enviados al servidor:", pendingFormData);
       alert("Formulario enviado con éxito");
       setShowConfirmModal(false);
       setFormDirty(false);
@@ -183,8 +193,25 @@ const handleSectionChange = (newSection) => {
           />
         );
 
+      case 'ver-docentes':
+        return <ViewTeachers />;
+      case 'ver-materias':
+        return <ViewSubjects />;
+      case 'ver-grupos':
+        return <ViewGroups />;
+      case 'ver-aulas':
+        return <ViewClassrooms />;
       case 'crear-grupo':
         return <CrearGrupo />;
+
+      case 'editar-grupo':
+        return <EditGroup />;
+
+      case 'crear-aula':
+        return <CreateAulaForm />;
+
+      case 'editar-aula':
+        return <AulaEditFlow />;
 
       case 'ver-horario':
         <div>Crear Reporte de Semestres</div>;

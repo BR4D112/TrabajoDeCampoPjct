@@ -29,7 +29,6 @@ export const FormPanel = () => {
         try {
             result = await 
             auth(email, password) //Para hacer testing cambio este metodo de auth(email, password) testAuth(email,password)
-            console.log(result);
             if (result && result.token) {
                 localStorage.setItem('token', result.token);
                 localStorage.setItem('user', JSON.stringify(result.user));
