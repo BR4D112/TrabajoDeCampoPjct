@@ -7,11 +7,12 @@ import Select from '../../selects/select';
 import { SEARCH_DOCENTE, CREATE_GROUP, ASSIGN_TEACHER_URL, SEARCH_GROUP } from '../../../API/Endpoints'; 
 import AssignTeacherModal from './AssignTeacherModal';
 
-const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
+const GroupFormsModal = ({ subject, count, sessionCount, onSubmit, onCancel }) => {
   const [teachers, setTeachers] = useState([]);
   const [groups, setGroups] = useState([]); // grupos existentes
   const [isAssignTeacherModalOpen, setAssignTeacherModalOpen] = useState(false);
-  const [newlyCreatedGroups, setNewlyCreatedGroups] = useState([]); // nuevos grupos creados
+  const [newlyCreatedGroups, setNewlyCreatedGroups] = useState([]); // nue<vo>s grupos creados
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,7 +49,6 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
           return res.json();
         })
         .then((data) => {
-          console.log('Grupos existentes:', data);
           setGroups(data); // ✅ Guardar grupos existentes
         })
         .catch((err) => console.error('Error al cargar grupos:', err));
@@ -116,7 +116,6 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
         throw new Error('Error al asignar el docente al grupo');
       }
 
-      console.log('Docente asignado exitosamente.');
       alert('Docente asignado exitosamente.');
     } catch (error) {
       console.error('Error al asignar docente:', error);
@@ -145,11 +144,13 @@ const GroupFormsModal = ({ subject, count, onSubmit, onCancel }) => {
 
       {isAssignTeacherModalOpen && (
         <AssignTeacherModal
-          groups={newlyCreatedGroups} // ✅ solo nuevos grupos
+          groups={newlyCreatedGroups}
+          sessionCount={sessionCount}
           onClose={() => setAssignTeacherModalOpen(false)}
           teachers={teachers}
           onAssign={assignTeacher}
         />
+
       )}
     </div>
   );

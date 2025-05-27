@@ -52,11 +52,8 @@ const DocForm = ({ onFormDirty, onSubmitRequest }) => {
         is_active: value.is_active === "Sí", // convierte "Sí" → true, "No" → false
       };
 
-      console.log('Datos del docente:', docenteData);
-
       const response = await createDocente(docenteData, token);
       alert('Docente creado exitosamente');
-      console.log('Respuesta del backend:', response);
       setIsDirty(false);
     } catch (error) {
       console.error('Error al crear docente:', error.message);

@@ -55,7 +55,6 @@ const SubjectFormGroup = ({ academic_period_id, semester, subjectCount }) => {
         }
 
         const data = await res.json();
-        console.log("Materia creada:", data);
       } catch (err) {
         console.error("Error creando materia:", err);
       }

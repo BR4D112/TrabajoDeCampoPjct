@@ -5,10 +5,6 @@ const url = LOGIN_URL;
  al darle al boton de cerrar sesión, solo eliminamos el token de local storage
 */
 const auth = async (email, password) => {
-    console.log("server url", url);
-    console.log("email", email);
-    console.log("password", password);
-    console.log(import.meta.env);
 
     const res = await fetch(url, {
       method: 'POST',

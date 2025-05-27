@@ -99,15 +99,13 @@ const EditarMateria = () => {
       {selectedSubject && (
         <div style={{ marginTop: "2rem", border: "1px solid #ccc", padding: "1rem" }}>
           <h3>Editando: {selectedSubject.name}</h3>
-
-<p>Código</p>
-<input
-  name="code"
-  placeholder="Código"
-  value={selectedSubject.code}
-  onChange={(e) => handleChange("code", e.target.value)}
-/>
-
+        
+          <Input
+            name="code"
+            placeholder="Código"
+            value={selectedSubject.code}
+            onChange={(e) => handleChange("code", e.target.value)}
+          />
           <Input
             name="name"
             placeholder="Nombre"

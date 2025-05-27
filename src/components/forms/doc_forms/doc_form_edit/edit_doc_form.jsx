@@ -64,7 +64,6 @@ const EditDocenteForm = ({ initialData, onFormDirty, onSubmitRequest }) => {
 
       const response = await updateDocente(initialData.id, docenteData, token);
       alert('Docente actualizado exitosamente');
-      console.log('Respuesta del backend:', response);
       setIsDirty(false);
       onSubmitRequest?.();
       setShowConfirmModal(false); // 👈 Cierra el modal después del éxito
