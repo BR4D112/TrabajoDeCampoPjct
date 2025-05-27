@@ -74,15 +74,10 @@ export function Sidebar({ first_name, setSection }) {
             <img src={searchDocOrUserIcon} alt="Ver Docentes" className={styles.icon} />
             Ver Docentes
           </button>
-          <h2>Materias</h2>
-          <button className={styles['sidebar-btn']} onClick={() => setSection('ver-materias')}>
-            <img src={searchSubjects} alt="Ver Materias" className={styles.icon} />
-            Ver Materias
-          </button>
           <h2>Grupos</h2>
           <button className={styles['sidebar-btn']} onClick={() => setSection('ver-grupos')}>
-            <img src={search} alt="Ver Grupos" className={styles.icon} />
-            Ver Grupos
+            <img src={search} alt="Ver Materias y Grupos" className={styles.icon} />
+            Ver Materias y Grupos
           </button>
           <h2>Aulas</h2>
           <button className={styles['sidebar-btn']} onClick={() => setSection('ver-aulas')}>
