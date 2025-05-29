@@ -56,8 +56,10 @@ export function Sidebar({ first_name, setSection }) {
             <img src={addAulaIcon} alt="Crear Reporte de Semestres" className={styles.icon} />
             Crear Reporte de Semestres
           </button>
-
-          
+          <button className={styles['sidebar-btn']} onClick={() => setSection('reportar-docente')}>
+            <img src={addAulaIcon} alt="Reportar Docente" className={styles.icon} />
+            Crear Reporte de Docentes
+          </button>
         </>
       )}
 

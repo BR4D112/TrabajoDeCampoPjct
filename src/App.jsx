@@ -41,6 +41,9 @@ import ViewSubjects from './components/forms/subj_forms/ViewSubjects';
 import ViewGroups from './components/forms/group_forms/ViewGroups';
 import ViewClassrooms from './components/forms/classrooms_forms/ViewClassrooms';
 
+// Reports
+import ReportTeacher from './components/forms/doc_forms/ReportTeacher';
+
 function App() {
   return (
     <Router>
@@ -212,6 +215,9 @@ const handleSectionChange = (newSection) => {
 
       case 'editar-aula':
         return <AulaEditFlow />;
+
+      case 'reportar-docente':
+        return <ReportTeacher />;
 
       case 'ver-horario':
         <div>Crear Reporte de Semestres</div>;
