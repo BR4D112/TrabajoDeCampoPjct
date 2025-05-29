@@ -27,3 +27,4 @@ export const SEARCH_CLASSROOM = `${envConfig.apiUrl}/classrooms/search`;
 export const UPDATE_CLASSROOM = `${envConfig.apiUrl}/classrooms/`;
 export const CREATE_REPORT = `${envConfig.apiUrl}/reports/send-schedule`;
 export const CREATE_REPORTS_ALL = `${envConfig.apiUrl}/reports/send-schedules`;
+
