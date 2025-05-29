@@ -1,7 +1,4 @@
-
-
-
-const API_URL = "https://sage-backend-mxlb.onrender.com";
+import { envConfig } from "../config/env.config";
 
 export const LOGIN_URL = `${envConfig.apiUrl}/auth/login`;
 export const RECOVER_URL = `${envConfig.apiUrl}/auth/recover`;
