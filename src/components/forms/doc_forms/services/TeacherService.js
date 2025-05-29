@@ -49,28 +49,50 @@ const searchDocentes = async (query, token) => {
   }
 };
 
-
 const updateDocente = async (id, docenteData, token) => {
   try {
-    const res = await fetch(`${UPDATE_DOCENTE}${id}`, {
-      method: 'PATCH', // <-- Cambiado de PUT a PATCH según tu backend
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `${token}`
-      },
+    const url = `${UPDATE_DOCENTE}${id}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`
+    };
+
+    console.log("🟨 PATCH a URL:", url);
+    console.log("📤 Headers:", headers);
+    console.log("📤 Payload (body):", JSON.stringify(docenteData, null, 2));
+
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers,
       body: JSON.stringify(docenteData)
     });
 
+    console.log("🔁 Status HTTP:", res.status);
+    const responseBody = await res.text();
+    console.log("📥 Respuesta cruda del backend:", responseBody);
+
     if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
+      let errorData = {};
+      try {
+        errorData = JSON.parse(responseBody);
+      } catch (err) {
+        console.warn("⚠️ No se pudo parsear el JSON de error:", responseBody);
+      }
+
+      console.error("❌ Error al actualizar docente:", errorData);
       throw new Error(errorData.message || `Error ${res.status} al actualizar el docente`);
     }
 
-    return await res.json();
+    const jsonResponse = JSON.parse(responseBody);
+    console.log("✅ Actualización exitosa, respuesta JSON:", jsonResponse);
+    return jsonResponse;
+
   } catch (err) {
-    console.error('Error en updateDocente:', err);
+    console.error('❌ Error general en updateDocente:', err);
     throw err;
   }
 };
+
+
 
 export { createDocente, searchDocentes, updateDocente };

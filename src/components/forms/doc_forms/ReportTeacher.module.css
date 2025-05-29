@@ -1,0 +1,24 @@
+/* ReportTeacher.module.css */
+
+.container {
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Dutch801 Rm BT';
+}
+
+.heading {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.selectWrapper {
+  margin-bottom: 2rem;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}

@@ -10,6 +10,7 @@ import {
   SEARCH_CLASSROOM,
   UPDATE_GROUP,
   UPDATE_SESSION,
+  ASSIGN_TEACHER_URL,
 } from '../../../API/Endpoints';
 
 const EditGroupModal = ({ group, onClose }) => {
@@ -31,8 +32,7 @@ const EditGroupModal = ({ group, onClose }) => {
 
   const hours = Array.from({ length: 14 }, (_, i) => {
     const hour = 7 + i;
-    const label = `${hour}:00`;
-    return { value: label, label };
+    return { value: `${hour}:00`, label: `${hour}:00` };
   });
 
   useEffect(() => {
@@ -41,14 +41,14 @@ const EditGroupModal = ({ group, onClose }) => {
     fetch(SEARCH_DOCENTE, { headers: { Authorization: token } })
       .then(res => res.json())
       .then(data =>
-        setTeachers(data.map(d => ({ label: d.full_name, value: d.id })))
+        setTeachers(data.map(d => ({ label: d.full_name, value: d.id.toString() })))
       )
       .catch(console.error);
 
     fetch(SEARCH_CLASSROOM, { headers: { Authorization: token } })
       .then(res => res.json())
       .then(data =>
-        setClassrooms(data.map(c => ({ label: c.name, value: c.id })))
+        setClassrooms(data.map(c => ({ label: c.name, value: c.id.toString() })))
       )
       .catch(console.error);
 
@@ -77,58 +77,72 @@ const EditGroupModal = ({ group, onClose }) => {
   const calculateDuration = (start, end) => {
     const [startHour] = start.split(":").map(Number);
     const [endHour] = end.split(":").map(Number);
-
-    if (isNaN(startHour) || isNaN(endHour)) return 1;
-    if (endHour <= startHour) return 1;
-
-    return endHour - startHour;
+    return Math.max(endHour - startHour, 1);
   };
 
-  const handleSubmit = async () => {
-    const token = localStorage.getItem('token');
+const handleSubmit = async () => {
+  const token = localStorage.getItem('token');
 
-    try {
-      // Actualizar grupo
-      await fetch(`${UPDATE_GROUP}${group.id}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          capacity: parseInt(form.capacity),
-          teacher_id: form.teacherId,
-        }),
-      });
+  try {
+    // 🟢 Actualizar capacidad del grupo
+    const groupRes = await fetch(`${UPDATE_GROUP}${group.id}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        capacity: parseInt(form.capacity),
+      }),
+    });
 
-      // Actualizar sesiones
-      await Promise.all(
-        sessions.map(session => {
-          const duration = calculateDuration(session.start_time, session.end_time);
+    const groupData = await groupRes.json();
+    console.log('✅ Grupo actualizado:', groupData);
 
-          return fetch(`${UPDATE_SESSION}/${session.id}`, {
-            method: 'PATCH',
-            headers: {
-              Authorization: token,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              day_of_week: session.day_of_week,
-              start_time: session.start_time,
-              duration_hours: duration,
-              classroom_id: parseInt(session.classroom_id),
-            }),
-          });
-        })
-      );
+    // 🟢 Asignar docente usando el endpoint especial
+    const teacherRes = await fetch(`${ASSIGN_TEACHER_URL}${group.id}/assign-teacher`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        teacher_id: parseInt(form.teacherId),
+      }),
+    });
 
-      alert('Grupo actualizado correctamente');
-      onClose();
-    } catch (error) {
-      console.error('Error actualizando:', error);
-      alert('Error al actualizar grupo');
-    }
-  };
+    const teacherData = await teacherRes.json();
+    console.log('✅ Docente asignado:', teacherData);
+
+    // 🟢 Actualizar sesiones
+    await Promise.all(
+      sessions.map(session => {
+        const duration = calculateDuration(session.start_time, session.end_time);
+
+        return fetch(`${UPDATE_SESSION}/${session.id}`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            day_of_week: session.day_of_week,
+            start_time: session.start_time,
+            duration_hours: duration,
+            classroom_id: parseInt(session.classroom_id),
+          }),
+        });
+      })
+    );
+
+    alert('Grupo actualizado correctamente');
+    onClose();
+  } catch (error) {
+    console.error('❌ Error actualizando grupo o docente:', error);
+    alert('Error al actualizar grupo');
+  }
+};
+
 
   return (
     <div className={styles.overlay}>
@@ -147,7 +161,10 @@ const EditGroupModal = ({ group, onClose }) => {
           label="Docente"
           value={form.teacherId}
           options={teachers}
-          onChange={(e) => setForm({ ...form, teacherId: e.target.value })}
+          onChange={(e) => {
+            console.log("🟢 Cambio de docente:", e.target.value);
+            setForm({ ...form, teacherId: e.target.value });
+          }}
         />
 
         <h3>Sesiones del grupo</h3>
@@ -183,11 +200,9 @@ const EditGroupModal = ({ group, onClose }) => {
               name={`end-${idx}`}
               label="Hora de fin"
               value={s.end_time}
-              options={
-                hours.filter(h =>
-                  parseInt(h.value.split(":")[0]) > parseInt(s.start_time?.split(":")[0] || 0)
-                )
-              }
+              options={hours.filter(h =>
+                parseInt(h.value.split(":")[0]) > parseInt(s.start_time?.split(":")[0] || 0)
+              )}
               onChange={(e) => handleSessionChange(idx, "end_time", e.target.value)}
             />
 
